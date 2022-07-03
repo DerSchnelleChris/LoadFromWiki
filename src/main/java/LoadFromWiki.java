@@ -11,7 +11,7 @@ import javax.swing.*;
 import processing.core.*;
 
 
-public class APItoLink {
+public class LoadFromWiki {
 
     public static String url;
     public static HttpResponse<String> response;

@@ -8,7 +8,7 @@ import processing.data.StringList;
 
 
 
-public class Slideshowprocessing extends PApplet {
+public class SlideshowWindow extends PApplet {
 
 	StringList imgsURL;
 	int counter=0;
@@ -58,7 +58,7 @@ public class Slideshowprocessing extends PApplet {
 		if (!weiterLaden)
 			surface.setVisible(true);
 
-		if(counter==APItoLink.Linkliste.size())
+		if(counter== LoadFromWiki.Linkliste.size())
 			counter=0;
 		/*try {
 			Thread.sleep(2500);
@@ -67,23 +67,23 @@ public class Slideshowprocessing extends PApplet {
 			e.printStackTrace();
 		}*/
 		if (!weiterLaden)
-			System.out.println("Warte "+ Integer.valueOf(APItoLink.bilddauerString) +" Sekunden");
-		delay(APItoLink.bilddauer);
+			System.out.println("Warte "+ Integer.valueOf(LoadFromWiki.bilddauerString) +" Sekunden");
+		delay(LoadFromWiki.bilddauer);
 		if (!weiterLaden)
 			System.out.print(".");
-		delay(APItoLink.bilddauer);
+		delay(LoadFromWiki.bilddauer);
 		if (!weiterLaden)
 			System.out.print(".");
-		delay(APItoLink.bilddauer);
+		delay(LoadFromWiki.bilddauer);
 		if (!weiterLaden)
 			System.out.print(".");
-		delay(APItoLink.bilddauer);
+		delay(LoadFromWiki.bilddauer);
 		if (!weiterLaden)
 			System.out.print(".");
-		delay(APItoLink.bilddauer);
+		delay(LoadFromWiki.bilddauer);
 		if (!weiterLaden)
 			System.out.print(".");
-		delay(APItoLink.bilddauer);
+		delay(LoadFromWiki.bilddauer);
 		if (!weiterLaden)
 			System.out.println(".");
 		if (!weiterLaden)
@@ -111,25 +111,25 @@ public class Slideshowprocessing extends PApplet {
 	boolean weiterLaden = true;
 
 	public void loadingThread_1() {
-		for (int i =0; i<APItoLink.Linkliste.size()/2; i++) {
+		for (int i = 0; i< LoadFromWiki.Linkliste.size()/2; i++) {
 			lock.lock();
-			imgsBin.add(loadImage(APItoLink.Linkliste.get(i)));
+			imgsBin.add(loadImage(LoadFromWiki.Linkliste.get(i)));
 			lock.unlock();
-			System.out.println("Thread1: Downloading Image: " +APItoLink.Linkliste.get(i));
+			System.out.println("Thread1: Downloading Image: " + LoadFromWiki.Linkliste.get(i));
 
-			APItoLink.setCounter();
+			LoadFromWiki.setCounter();
 
 		}
 		weiterLaden = false;
 	}
 	
 	public void loadingThread_2() {
-		for (int i =APItoLink.Linkliste.size()/2; i<APItoLink.Linkliste.size(); i++) {
+		for (int i = LoadFromWiki.Linkliste.size()/2; i< LoadFromWiki.Linkliste.size(); i++) {
 			lock.lock();
-			imgsBin.add(loadImage(APItoLink.Linkliste.get(i)));	
+			imgsBin.add(loadImage(LoadFromWiki.Linkliste.get(i)));
 			lock.unlock();
-			System.out.println("Thread2: Downloading Image: " +APItoLink.Linkliste.get(i));
-			APItoLink.setCounter();
+			System.out.println("Thread2: Downloading Image: " + LoadFromWiki.Linkliste.get(i));
+			LoadFromWiki.setCounter();
 		}
 		weiterLaden = false;
 
