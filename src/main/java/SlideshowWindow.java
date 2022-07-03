@@ -1,25 +1,13 @@
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import processing.awt.PSurfaceAWT;
 import processing.core.*;
-import processing.data.JSONObject;
-import processing.data.StringList;
-
-
 
 public class SlideshowWindow extends PApplet {
-
-	StringList imgsURL;
 	int counter=0;
-	ArrayList<PImage> imgsBin= new ArrayList<PImage>();
-	JSONObject json;
+	ArrayList<PImage> imgsBin= new ArrayList<>();
 	Lock lock = new ReentrantLock();
-	PSurfaceAWT.SmoothCanvas smoothCanvas;
-	
-	
-	
-	
+
 	public void settings() {
 		size(1280,720);
 		
@@ -32,34 +20,17 @@ public class SlideshowWindow extends PApplet {
 		noLoop();
 	}
 
-
-	int zaehler = 0;
-	
 	public void draw() {
 		surface.setLocation(100,0);
 		background(255);
 
-
-
-
-
-
-
-
-
-		if (weiterLaden)
-		loadImages();
+		if (weiterLaden) {
+			loadImages();
+		}
 
 		if (!weiterLaden)
 			loop();
 
-
-
-
-		
-
-	 	  
-	  
 		if (!weiterLaden) {
 			image(imgsBin.get(counter), 0, 0, 1280, 720);
 			counter++;
@@ -70,12 +41,7 @@ public class SlideshowWindow extends PApplet {
 
 		if(counter == LoadFromWiki.Linkliste.size())
 			counter=0;
-		/*try {
-			Thread.sleep(2500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+
 		if (!weiterLaden)
 			System.out.println("Warte "+ Integer.valueOf(LoadFromWiki.bilddauerString) +" Sekunden");
 		delay(LoadFromWiki.bilddauer);
@@ -103,13 +69,9 @@ public class SlideshowWindow extends PApplet {
 
 	private synchronized void loadImages() {
 
-		Thread t1 = new Thread(()->{
-			loadingThread_1();
-		});
+		Thread t1 = new Thread(this::loadingThread_1);
 
-		Thread t2 = new Thread(()->{
-			loadingThread_2();
-		});
+		Thread t2 = new Thread(this::loadingThread_2);
 
 
 		t1.start();
