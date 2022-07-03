@@ -19,7 +19,7 @@ public class LoadFromWiki {
     public static String iD;
     public static ArrayList<String> Linkliste = new ArrayList<>();
 
-    static JProgressBar bar = new JProgressBar();
+    static JProgressBar progressBar = new JProgressBar();
 
     static JFrame frame = new JFrame("Ladestatus");
 
@@ -50,10 +50,10 @@ public class LoadFromWiki {
 
             //url = JOptionPane.showInputDialog(frame, "Wiki URL");
 
-            bar.setValue(0);
-            bar.setBounds(0, 0, 420, 50);
-            bar.setStringPainted(true);
-            frame.add(bar);
+            progressBar.setValue(0);
+            progressBar.setBounds(0, 0, 420, 50);
+            progressBar.setStringPainted(true);
+            frame.add(progressBar);
             frame.setSize(420, 150);
             frame.setLocation(450, 250);
             frame.setLayout(null);
@@ -63,7 +63,7 @@ public class LoadFromWiki {
 
             syncRequest();
             frame.setVisible(true);
-            bar.setVisible(true);
+            progressBar.setVisible(true);
 
             System.out.println(iD);
             getLinks();
@@ -141,11 +141,11 @@ public class LoadFromWiki {
 
         public static void setCounter () {
             counter = counter + imageLadezyklen;
-            bar.setValue(counter);
+            progressBar.setValue(counter);
 
             if (counter >= 91) {
                 frame.setVisible(false);
-                bar.setVisible(false);
+                progressBar.setVisible(false);
             }
 
         }
