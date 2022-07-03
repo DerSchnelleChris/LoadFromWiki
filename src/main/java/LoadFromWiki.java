@@ -16,11 +16,8 @@ public class LoadFromWiki {
     public static HttpResponse<String> httpResponse2;
     public static String iD;
     public static ArrayList<String> Linkliste = new ArrayList<>();
-
     static JProgressBar progressBar = new JProgressBar();
-
     static JFrame frame = new JFrame("Download Fortschritt");
-
     static int bilddauer;
     static String bilddauerString;
     private static int imageLadezyklen;
