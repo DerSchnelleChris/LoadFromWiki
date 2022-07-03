@@ -54,8 +54,7 @@ public class SlideshowWindow extends PApplet {
 			loop();
 
 
-		zaehler++;
-		System.out.println(zaehler);
+
 
 		
 

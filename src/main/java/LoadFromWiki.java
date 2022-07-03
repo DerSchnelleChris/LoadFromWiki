@@ -14,14 +14,16 @@ import processing.core.*;
 public class LoadFromWiki {
 
     public static String url;
-    public static HttpResponse<String> response;
-    public static HttpResponse<String> response2;
-    public static String idStr;
+    public static HttpResponse<String> httpResponse;
+    public static HttpResponse<String> httpResponse2;
+    public static String iD;
     public static ArrayList<String> Linkliste = new ArrayList<>();
-    private static Lock lock = new ReentrantLock();
+
     static JProgressBar bar = new JProgressBar();
 
     static JFrame frame = new JFrame("Ladestatus");
+
+    private static Lock lock = new ReentrantLock();
     static int bilddauer;
     static String bilddauerString;
 
@@ -57,14 +59,14 @@ public class LoadFromWiki {
             frame.setLayout(null);
             URL url2 = new URL(url);
             String[] segments = url2.getPath().split("/");
-            idStr = segments[segments.length - 1];
+            iD = segments[segments.length - 1];
 
             syncRequest();
             frame.setVisible(true);
             bar.setVisible(true);
 
-            System.out.println(idStr);
-            links();
+            System.out.println(iD);
+            getLinks();
 
             new Thread(new Runnable() {
 
@@ -81,9 +83,9 @@ public class LoadFromWiki {
     }
 
 
-        public static void links () {
+        public static void getLinks() {
 
-            String list = response2.body().toString();
+            String list = httpResponse2.body().toString();
             for (int i = 10; i < list.length(); i++) {
                 if (list.substring(i - 4, i).equals("\"url")) {
                     int j = i;
@@ -102,42 +104,43 @@ public class LoadFromWiki {
             for (int p = 0; p < Linkliste.size(); p++) {
                 System.out.println(Linkliste.get(p));
             }
-            ladezyklen = 100 / Linkliste.size();
+            imageLadezyklen = 100 / Linkliste.size();
         }
 
 
-        public static int find () {
-            return response.body().toString().indexOf("pageid");
+        public static int findPageId() {
+            return httpResponse.body().toString().indexOf("pageid");
 
 
         }
 
-        public static String pageid () {
+        public static String getPageId() {
             String id;
 
-            id = response.body().toString();
-            id = id.substring((find() + 8), response.body().toString().indexOf(",\"ns"));
+            id = httpResponse.body().toString();
+            id = id.substring((findPageId() + 8), httpResponse.body().toString().indexOf(",\"ns"));
             return id;
         }
 
 
         private static void syncRequest () throws IOException, InterruptedException {
 
-            String name = idStr;
-            var client = HttpClient.newHttpClient();
-            var request = HttpRequest.newBuilder(URI.create("https://de.wikipedia.org/w/api.php?action=query&format=json&titles=" + name)).build();
-            response = client.send(request, BodyHandlers.ofString());
-            var request2 = HttpRequest.newBuilder(URI.create("https://de.wikipedia.org/w/api.php?action=query&pageids=" + pageid() +
+            String name = iD;
+            var httpClient = HttpClient.newHttpClient();
+            var httpRequest = HttpRequest.newBuilder(URI.create("https://de.wikipedia.org/w/api.php?action=query&format=json&titles=" + name)).build();
+            httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
+            var httpRequest2 = HttpRequest.newBuilder(URI.create("https://de.wikipedia.org/w/api.php?action=query&pageids=" + getPageId() +
                     "&generator=images&prop=imageinfo&iiprop=url&format=json&gimlimit=15")).build();
-            response2 = client.send(request2, BodyHandlers.ofString());
+
+            httpResponse2 = httpClient.send(httpRequest2, BodyHandlers.ofString());
 
         }
 
-        public static int ladezyklen;
+        public static int imageLadezyklen;
         public static int counter = 0;
 
         public static void setCounter () {
-            counter = counter + ladezyklen;
+            counter = counter + imageLadezyklen;
             bar.setValue(counter);
 
             if (counter >= 91) {
