@@ -73,7 +73,7 @@ public class LoadFromWiki {
 
                 }
             }).start();
-            PApplet.main("Slideshowprocessing");
+            PApplet.main("SlideshowWindow");
 
 
 
@@ -128,7 +128,7 @@ public class LoadFromWiki {
             var request = HttpRequest.newBuilder(URI.create("https://de.wikipedia.org/w/api.php?action=query&format=json&titles=" + name)).build();
             response = client.send(request, BodyHandlers.ofString());
             var request2 = HttpRequest.newBuilder(URI.create("https://de.wikipedia.org/w/api.php?action=query&pageids=" + pageid() +
-                    "&generator=images&prop=imageinfo&iiprop=url&format=json&gimlimit=15")).build();
+                    "&generator=images&prop=imageinfo&iiprop=url&format=json&gimlimit=10")).build();
             response2 = client.send(request2, BodyHandlers.ofString());
 
         }
@@ -140,7 +140,7 @@ public class LoadFromWiki {
             counter = counter + ladezyklen;
             bar.setValue(counter);
 
-            if (counter >= 90) {
+            if (counter >= 100) {
                 frame.setVisible(false);
                 bar.setVisible(false);
             }
