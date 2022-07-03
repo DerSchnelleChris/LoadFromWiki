@@ -5,8 +5,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.*;
 import processing.core.*;
 
@@ -21,9 +19,8 @@ public class LoadFromWiki {
 
     static JProgressBar progressBar = new JProgressBar();
 
-    static JFrame frame = new JFrame("Ladestatus");
+    static JFrame frame = new JFrame("Download Fortschritt");
 
-    private static Lock lock = new ReentrantLock();
     static int bilddauer;
     static String bilddauerString;
 
@@ -44,12 +41,7 @@ public class LoadFromWiki {
         if (result == JOptionPane.OK_OPTION) {
             url = urlEingabe.getText();
             bilddauerString = bildanzeigedauer.getText();
-            bilddauer = Integer.valueOf(bilddauerString)*1000/6;
-
-            //JFrame frame = new JFrame("Ladestatus");
-
-            //url = JOptionPane.showInputDialog(frame, "Wiki URL");
-
+            bilddauer = Integer.parseInt(bilddauerString)*1000/6;
             progressBar.setValue(0);
             progressBar.setBounds(0, 0, 420, 50);
             progressBar.setStringPainted(true);
@@ -60,34 +52,21 @@ public class LoadFromWiki {
             URL url2 = new URL(url);
             String[] segments = url2.getPath().split("/");
             iD = segments[segments.length - 1];
-
             syncRequest();
             frame.setVisible(true);
             progressBar.setVisible(true);
-
             System.out.println(iD);
             getLinks();
-
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-
-                }
+            new Thread(() -> {
             }).start();
             PApplet.main("SlideshowWindow");
-
-
-
         }
     }
-
-
         public static void getLinks() {
 
-            String list = httpResponse2.body().toString();
+            String list = httpResponse2.body();
             for (int i = 10; i < list.length(); i++) {
-                if (list.substring(i - 4, i).equals("\"url")) {
+                if (list.startsWith("\"url", i - 4)) {
                     int j = i;
                     while (true) {
                         if (list.substring(j - 3, j).equalsIgnoreCase("png") || list.substring(j - 3, j).equalsIgnoreCase("jpg") || list.substring(j - 4, j).equalsIgnoreCase("jpeg")) {
@@ -101,28 +80,23 @@ public class LoadFromWiki {
                     }
                 }
             }
-            for (int p = 0; p < Linkliste.size(); p++) {
-                System.out.println(Linkliste.get(p));
+            for (String s : Linkliste) {
+                System.out.println(s);
             }
             imageLadezyklen = 100 / Linkliste.size();
         }
 
-
         public static int findPageId() {
-            return httpResponse.body().toString().indexOf("pageid");
-
-
+            return httpResponse.body().indexOf("pageid");
         }
 
         public static String getPageId() {
             String id;
 
-            id = httpResponse.body().toString();
-            id = id.substring((findPageId() + 8), httpResponse.body().toString().indexOf(",\"ns"));
+            id = httpResponse.body();
+            id = id.substring((findPageId() + 8), httpResponse.body().indexOf(",\"ns"));
             return id;
         }
-
-
         private static void syncRequest () throws IOException, InterruptedException {
 
             String name = iD;
@@ -135,10 +109,6 @@ public class LoadFromWiki {
             httpResponse2 = httpClient.send(httpRequest2, BodyHandlers.ofString());
 
         }
-
-        public static int imageLadezyklen;
-        public static int counter = 0;
-
         public static void setCounter () {
             counter = counter + imageLadezyklen;
             progressBar.setValue(counter);
@@ -147,8 +117,5 @@ public class LoadFromWiki {
                 frame.setVisible(false);
                 progressBar.setVisible(false);
             }
-
         }
-
-
     }
