@@ -23,6 +23,8 @@ public class LoadFromWiki {
 
     static int bilddauer;
     static String bilddauerString;
+    private static int imageLadezyklen;
+    private static int counter;
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -85,7 +87,7 @@ public class LoadFromWiki {
             }
             imageLadezyklen = 100 / Linkliste.size();
         }
-
+        
         public static int findPageId() {
             return httpResponse.body().indexOf("pageid");
         }
