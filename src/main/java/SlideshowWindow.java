@@ -29,10 +29,11 @@ public class SlideshowWindow extends PApplet {
 	public void setup() {
 		fill(255);
 		surface.setVisible(false);
+		noLoop();
 	}
-	
 
-	
+
+	int zaehler = 0;
 	
 	public void draw() {
 		surface.setLocation(100,0);
@@ -43,10 +44,18 @@ public class SlideshowWindow extends PApplet {
 
 
 
+
+
+
 		if (weiterLaden)
 		loadImages();
 
+		if (!weiterLaden)
+			loop();
 
+
+		zaehler++;
+		System.out.println(zaehler);
 
 		
 
@@ -60,7 +69,7 @@ public class SlideshowWindow extends PApplet {
 		if (!weiterLaden)
 			surface.setVisible(true);
 
-		if(counter== LoadFromWiki.Linkliste.size())
+		if(counter == LoadFromWiki.Linkliste.size())
 			counter=0;
 		/*try {
 			Thread.sleep(2500);
@@ -93,7 +102,7 @@ public class SlideshowWindow extends PApplet {
 	 
 	}
 
-	private void loadImages() {
+	private synchronized void loadImages() {
 
 		Thread t1 = new Thread(()->{
 			loadingThread_1();
@@ -123,6 +132,7 @@ public class SlideshowWindow extends PApplet {
 
 		}
 		weiterLaden = false;
+		loop();
 	}
 	
 	public void loadingThread_2() {
@@ -134,6 +144,7 @@ public class SlideshowWindow extends PApplet {
 			LoadFromWiki.setCounter();
 		}
 		weiterLaden = false;
+		loop();
 
 	}
 	
