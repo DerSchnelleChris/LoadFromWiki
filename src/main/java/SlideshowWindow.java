@@ -5,7 +5,7 @@ import processing.core.*;
 public class SlideshowWindow extends PApplet {
 	int counter=0;
 	boolean weiterLaden = true;
-	ArrayList<PImage> imgsBin= new ArrayList<>();
+	ArrayList<PImage> imageListe = new ArrayList<>();
 	Lock lock = new ReentrantLock();
 
 	public void settings() {
@@ -29,7 +29,7 @@ public class SlideshowWindow extends PApplet {
 			loop();
 
 		if (!weiterLaden) {
-			image(imgsBin.get(counter), 0, 0, 1280, 720);
+			image(imageListe.get(counter), 0, 0, 1280, 720);
 			counter++;
 		}
 
@@ -72,7 +72,7 @@ public class SlideshowWindow extends PApplet {
 	public void loadingThread_1() {
 		for (int i = 0; i< LoadFromWiki.Linkliste.size()/2; i++) {
 			lock.lock();
-			imgsBin.add(loadImage(LoadFromWiki.Linkliste.get(i)));
+			imageListe.add(loadImage(LoadFromWiki.Linkliste.get(i)));
 			lock.unlock();
 			System.out.println("Thread1: Downloading Image: " + LoadFromWiki.Linkliste.get(i));
 			LoadFromWiki.setCounter();
@@ -84,7 +84,7 @@ public class SlideshowWindow extends PApplet {
 	public void loadingThread_2() {
 		for (int i = LoadFromWiki.Linkliste.size()/2; i< LoadFromWiki.Linkliste.size(); i++) {
 			lock.lock();
-			imgsBin.add(loadImage(LoadFromWiki.Linkliste.get(i)));
+			imageListe.add(loadImage(LoadFromWiki.Linkliste.get(i)));
 			lock.unlock();
 			System.out.println("Thread2: Downloading Image: " + LoadFromWiki.Linkliste.get(i));
 			LoadFromWiki.setCounter();

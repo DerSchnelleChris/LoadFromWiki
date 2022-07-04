@@ -37,6 +37,7 @@ public class LoadFromWiki {
 
         int result = JOptionPane.showConfirmDialog(null, eingabe,
                 "Wiki Url", JOptionPane.OK_CANCEL_OPTION);
+        System.out.println(result);
         if (result == JOptionPane.OK_OPTION) {
             url = urlEingabe.getText();
             bilddauerString = bildanzeigedauer.getText();
@@ -72,7 +73,7 @@ public class LoadFromWiki {
                             Linkliste.add(list.substring(i + 3, j));
                             break;
                         }
-                        if (list.substring(j - 3, j).equalsIgnoreCase("svg") || list.substring(j - 3, j).equalsIgnoreCase("tif")) {
+                        if (list.substring(j - 3, j).equalsIgnoreCase("svg") || list.substring(j - 3, j).equalsIgnoreCase("tif") || list.substring(j - 4, j).equalsIgnoreCase("webm")) {
                             break;
                         }
                         j++;
@@ -82,6 +83,7 @@ public class LoadFromWiki {
             for (String s : Linkliste) {
                 System.out.println(s);
             }
+            
             imageLadezyklen = 100 / Linkliste.size();
         }
         
